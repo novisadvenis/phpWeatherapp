@@ -10,11 +10,11 @@
 <h2>My Phonebook</h2>
 ​
 
-<form name="form" action="" method="get">
-<input type="text" id="myInput" onkeyup="myFunction()" name= "cityname" onfocusout="myfunction2()" placeholder="Search for names.." title="Type in a name">
+<form name="form"  method="get">
+<input type="text" id="myInput" onfocus="myfunction()"  name= "cityname" placeholder="Search for names.." title="Type in a name">
 </form>
 
-<?php echo $_GET['cityname']; ?>
+<div id="table">
 <?php
 
 try{
@@ -24,53 +24,48 @@ try{
 } catch(PDOException $e){
     die("ERROR: Could not connect. " . $e->getMessage());
 }
- 
-
-try{
+/* try{
     $sql = "SELECT * FROM citylist WHERE name like \"$_GET[cityname]%\" ";  
     $result = $pdo->query($sql);
     if($result->rowCount() > 0){
-        echo "<table>";
-            echo "<tr>";
-                echo "<th>id</th>";
-                echo "<th>first_name</th>";
-                echo "<th>last_name</th>";
-            echo "</tr>";
+            echo "<div>";
+                echo "first_name";
+                echo "last_name";
+            echo "</div>";
         while($row = $result->fetch()){
-            echo "<tr>";
-                echo "<td>" . $row['id'] . "</td>";
-                echo "<td>" . $row['name'] . "</td>";
-                echo "<td>" . $row['country'] . "</td>";
-            echo "</tr>";
+            echo '<a href="http://api.openweathermap.org/data/2.5/weather?id='.$row['id'].'&appid=78b84b9d6f9188a25c214a7714e358ac"><div>';
+                echo  $row['name'] ;
+                echo  $row['country'] ;
+            echo "</div></a>";
         }
-        echo "</table>";
-     
         unset($result);
     } else{
         echo "No records matching your query were found.";
     }
 } catch(PDOException $e){
     die("ERROR: Could not able to execute $sql. " . $e->getMessage());
-}
- 
-
+} */
 unset($pdo);
 ?>
-​
-<ul id="myUL" style="display:none;">
-  <li><a href="#">Adele</a></li>
-  <li><a href="#">Agnes</a></li>
-​
-  <li><a href="#">Billy</a></li>
-  <li><a href="#">Bob</a></li>
-​
-  <li><a href="#">Calvin</a></li>
-  <li><a href="#">Christina</a></li>
-  <li><a href="#">Cindy</a></li>
-</ul>
-​<div id="icon"></div>
+</div>
+<div id ="icon"></div>
 <script>
-       function myfunction2(){
+$("#table a").click((e)=>{
+    e.preventDefault();
+    $.get( e.currentTarget.href, function( data ) {
+  alert("finished")
+}).done(function(x){
+    console.log(x.weather[0].main)
+    var weather = x.weather[0].main
+
+     $("#icon").attr("class",weather)
+    
+    });
+})
+funtion myfunction(){
+    
+}
+    /*    function myfunction2(){
         var input, filter, ul, li, a, i;
         input = document.getElementById("myInput").value;
         console.log(input)
@@ -80,34 +75,7 @@ unset($pdo);
         }
         
     }
-function myFunction() {
-    var input, filter, ul, li, a, i;
-    input = document.getElementById("myInput");
-    filter = input.value.toUpperCase();
-    ul = document.getElementById("myUL");
-    ul.setAttribute("style","display:block;")
-    li = ul.getElementsByTagName("li");
-    for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-}
-
-/* $.get( "http://api.openweathermap.org/data/2.5/weather?id=7287650&appid=78b84b9d6f9188a25c214a7714e358ac", function( data ) {
-  alert("finished")
-}).done(function(x){
-    var weather = x.weather[0].main
-    if(weather ="Drizzle"){
-        $("#icon").attr("class","Rain")
-    }else{
-        $("#icon").attr("class",weather)
-    }
-    
-    }); */
+ */
 </script>
 ​
 </body>
